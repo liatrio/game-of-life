@@ -39,5 +39,31 @@ pipeline {
                  sh 'docker run -p 18887:8080 -d --network=${LDOP_NETWORK_NAME} --name gameoflife-tomcat-temp gameoflife-tomcat'
              }
          }
+         stage('Stop local container') {
+           agent any
+           steps {
+             sh 'docker rm -f petclinic-tomcat-temp || true'
+           }
+         }
+         stage('Deploy to dev') {
+             agent any
+             steps {
+                 sh 'docker rm -f dev-gameoflife || true'
+                 sh 'docker run -p 18888:8080 -d --network=${LDOP_NETWORK_NAME} --name dev-gameoflife gameoflife-tomcat'
+             }
+         }
+         stage('Smoke test dev') {
+             agent {
+                 docker {
+                     image 'maven:3.5.0'
+                     args '--network=${LDOP_NETWORK_NAME}'
+                 }
+             }
+             steps {
+                 sh "cd regression-suite"
+                 sh "mvn clean -B test -DPETCLINIC_URL=http://dev-gameoflife:8080/gameoflife/"
+                 echo "Should be accessible at http://localhost:18888/gameoflife"
+             }
+         }
     }
 }

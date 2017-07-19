@@ -505,8 +505,6 @@
               </repository>
           </distributionManagement>
 
-          <url>demogameoflife</url>
-
         </profile>
     </profiles>
 </project>

@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-build plugin="workflow-job@2.11.1">
+  <actions>
+    <hudson.model.CauseAction>
+      <causeBag class="linked-hash-map">
+        <entry>
+          <hudson.model.Cause_-UserIdCause/>
+          <int>1</int>
+        </entry>
+      </causeBag>
+    </hudson.model.CauseAction>
+    <org.jenkinsci.plugins.workflow.libs.LibrariesAction plugin="workflow-cps-global-lib@2.8">
+      <libraries/>
+    </org.jenkinsci.plugins.workflow.libs.LibrariesAction>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.ExecutionModelAction plugin="pipeline-model-definition@1.1.7">
+      <stages plugin="pipeline-model-api@1.1.7">
+        <stages>
+          <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+            <name>Build</name>
+            <agent>
+              <variables class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTClosureMap">
+                <variables class="linked-hash-map">
+                  <entry>
+                    <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                      <key>image</key>
+                    </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                    <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-1>
+                      <value class="string">maven:3.5.0</value>
+                    </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-1>
+                  </entry>
+                  <entry>
+                    <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                      <key>args</key>
+                    </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                    <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-1>
+                      <value class="string">-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}</value>
+                    </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-1>
+                  </entry>
+                </variables>
+              </variables>
+              <agentType>
+                <key>docker</key>
+              </agentType>
+            </agent>
+            <branches>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                <name>default</name>
+                <steps>
+                  <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTTreeStep>
+                    <name>configFileProvider</name>
+                    <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTSingleArgument">
+                      <value class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue$2">
+                        <value class="string">${[configFile(fileId: &apos;nexus&apos;, variable: &apos;MAVEN_SETTINGS&apos;)]}</value>
+                      </value>
+                    </args>
+                    <children>
+                      <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                        <name>sh</name>
+                        <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                          <arguments class="linked-hash-map">
+                            <entry>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                                <key>script</key>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-1>
+                                <value class="string">mvn -s $MAVEN_SETTINGS clean install -DskipTests=true -B</value>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-1>
+                            </entry>
+                          </arguments>
+                        </args>
+                      </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                    </children>
+                  </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTTreeStep>
+                </steps>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+            </branches>
+          </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+        </stages>
+      </stages>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.ExecutionModelAction>
+    <hudson.plugins.git.util.BuildData plugin="git@3.3.0">
+      <buildsByBranchName>
+        <entry>
+          <string>refs/remotes/origin/LDOP-jenkinsfile</string>
+          <hudson.plugins.git.util.Build>
+            <marked plugin="git-client@2.4.6">
+              <sha1>91897407cba30963512aee3bf952063f247e2945</sha1>
+              <branches class="list">
+                <hudson.plugins.git.Branch>
+                  <sha1 reference="../../../sha1"/>
+                  <name>refs/remotes/origin/LDOP-jenkinsfile</name>
+                </hudson.plugins.git.Branch>
+              </branches>
+            </marked>
+            <revision reference="../marked"/>
+            <hudsonBuildNumber>3</hudsonBuildNumber>
+          </hudson.plugins.git.util.Build>
+        </entry>
+      </buildsByBranchName>
+      <lastBuild reference="../buildsByBranchName/entry/hudson.plugins.git.util.Build"/>
+      <remoteUrls>
+        <string>https://github.com/liatrio/game-of-life.git</string>
+      </remoteUrls>
+    </hudson.plugins.git.util.BuildData>
+    <hudson.plugins.git.GitTagAction plugin="git@3.3.0">
+      <tags class="hudson.util.CopyOnWriteMap$Tree">
+        <entry>
+          <string>refs/remotes/origin/LDOP-jenkinsfile</string>
+          <list/>
+        </entry>
+      </tags>
+      <ws>/var/jenkins_home/jobs/game-of-life/workspace</ws>
+    </hudson.plugins.git.GitTagAction>
+    <org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState plugin="workflow-scm-step@2.5">
+      <revisionStates>
+        <entry>
+          <string>git https://github.com/liatrio/game-of-life.git</string>
+          <hudson.scm.SCMRevisionState_-None/>
+        </entry>
+      </revisionStates>
+    </org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState>
+    <org.jenkinsci.plugins.workflow.cps.EnvActionImpl plugin="workflow-cps@2.36">
+      <env class="tree-map"/>
+    </org.jenkinsci.plugins.workflow.cps.EnvActionImpl>
+    <org.jenkinsci.plugins.docker.commons.fingerprint.DockerFingerprintAction plugin="docker-commons@1.7">
+      <imageIDs>
+        <string>sha256:07473dc7b9d642340f2bd5aa9e52a5de09a6876e5a7240f40fa4bf18807bba85</string>
+      </imageIDs>
+    </org.jenkinsci.plugins.docker.commons.fingerprint.DockerFingerprintAction>
+    <org.jenkinsci.plugins.docker.workflow.ImageAction plugin="docker-workflow@1.12">
+      <names class="sorted-set">
+        <string>maven:3.5.0</string>
+      </names>
+    </org.jenkinsci.plugins.docker.workflow.ImageAction>
+  </actions>
+  <queueId>5</queueId>
+  <timestamp>1500488410283</timestamp>
+  <startTime>1500488410284</startTime>
+  <result>FAILURE</result>
+  <duration>41446</duration>
+  <keepLog>false</keepLog>
+  <execution class="org.jenkinsci.plugins.workflow.cps.CpsFlowExecution">
+    <result>FAILURE</result>
+    <script>pipeline {
+    agent none
+    stages {
+       stage(&apos;Build&apos;) {
+           agent {
+               docker {
+                   image &apos;maven:3.5.0&apos;
+                   args &apos;-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}&apos;
+               }
+           }
+           steps {
+               configFileProvider(
+                       [configFile(fileId: &apos;nexus&apos;, variable: &apos;MAVEN_SETTINGS&apos;)]) {
+                   sh &apos;mvn -s $MAVEN_SETTINGS clean install -DskipTests=true -B&apos;
+               }
+           }
+       }
+    }
+}</script>
+    <loadedScripts class="map"/>
+    <timings class="map">
+      <entry>
+        <string>flowNode</string>
+        <long>87427471</long>
+      </entry>
+      <entry>
+        <string>classLoad</string>
+        <long>570920437</long>
+      </entry>
+      <entry>
+        <string>run</string>
+        <long>4294426471</long>
+      </entry>
+      <entry>
+        <string>parse</string>
+        <long>75434860</long>
+      </entry>
+      <entry>
+        <string>saveProgram</string>
+        <long>320015101</long>
+      </entry>
+    </timings>
+    <sandbox>true</sandbox>
+    <iota>22</iota>
+    <head>1:22</head>
+  </execution>
+  <checkouts class="hudson.util.PersistedList">
+    <org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+      <scm class="hudson.plugins.git.GitSCM" plugin="git@3.3.0">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+          <hudson.plugins.git.UserRemoteConfig>
+            <url>https://github.com/liatrio/game-of-life.git</url>
+          </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+          <hudson.plugins.git.BranchSpec>
+            <name>*/LDOP-jenkinsfile</name>
+          </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions/>
+      </scm>
+      <node></node>
+      <workspace>/var/jenkins_home/jobs/game-of-life/workspace</workspace>
+      <changelogFile>/var/jenkins_home/jobs/game-of-life/builds/3/changelog0.xml</changelogFile>
+      <pollingBaseline class="hudson.scm.SCMRevisionState$None" reference="../../../actions/org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState/revisionStates/entry/hudson.scm.SCMRevisionState_-None"/>
+    </org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+  </checkouts>
+</flow-build>

@@ -44,4 +44,6 @@ pipeline {
           steps {
               sh 'docker rm -f petclinic-tomcat-temp || true'
           }
+        }
+    }
 }

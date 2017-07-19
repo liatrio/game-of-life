@@ -42,7 +42,7 @@ pipeline {
          stage('Stop local container') {
            agent any
            steps {
-             sh 'docker rm -f petclinic-tomcat-temp || true'
+             sh 'docker rm -f gameoflife-tomcat-temp || true'
            }
          }
          stage('Deploy to dev') {

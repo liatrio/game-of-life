@@ -53,7 +53,7 @@ pipeline {
              }
          }
          stage('Smoke test dev') {
-             agent master
+             agent { label 'master' }
              steps {
                  sh "curl http://localhost:18888/gameoflife"
                  echo "Should be accessible at http://localhost:18888/gameoflife"
@@ -67,7 +67,7 @@ pipeline {
              }
          }
          stage('Smoke test qa') {
-             agent master
+             agent { label 'master' }
              steps {
                  sh "curl http://localhost:18889/gameoflife"
                  echo "Should be accessible at http://localhost:18889/gameoflife"
@@ -82,7 +82,7 @@ pipeline {
              }
          }
          stage('Smoke Test prod') {
-             agent master
+             agent { label 'master' }
              steps {
                  sh "curl http://localhost:18890/gameoflife"
                  echo "Should be accessible at http://localhost:18890/gameoflife"

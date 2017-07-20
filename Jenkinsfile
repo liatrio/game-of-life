@@ -64,5 +64,33 @@ pipeline {
                  echo "Should be accessible at http://localhost:18888/gameoflife"
              }
          }
+         stage('Smoke test qa') {
+             agent {
+                 docker {
+                     image 'maven:3.5.0'
+                     args '--network=${LDOP_NETWORK_NAME}'
+                 }
+             }
+             steps {
+                 sh "mvn clean test"
+                 echo "Should be accessible at http://localhost:18889/gameoflife"
+                 input 'Deploy to Prod?'
+             }
+         }
+         stage('Deploy to prod') {
+             agent any
+             steps {
+                 sh 'docker rm -f prod-gameoflife || true'
+                 sh 'docker run -p 18890:8080 -d --network=${LDOP_NETWORK_NAME} --name prod-gameoflife gameoflife-tomcat'
+             }
+         }
+         stage('Smoke Test prod') {
+             agent {
+                 docker {
+                     image 'maven:3.5.0'
+                     args '--network=${LDOP_NETWORK_NAME}'
+                 }
+             }
+          }
     }
 }

@@ -60,7 +60,6 @@ pipeline {
                  }
              }
              steps {
-                 sh "cd regression-suite"
                  sh "mvn clean -B test -DPETCLINIC_URL=http://dev-gameoflife:8080/gameoflife/"
                  echo "Should be accessible at http://localhost:18888/gameoflife"
              }

@@ -91,6 +91,10 @@ pipeline {
                      args '--network=${LDOP_NETWORK_NAME}'
                  }
              }
+             steps {
+                 sh "mvn clean test"
+                 echo "Should be accessible at http://localhost:18890/gameoflife"
+             }
           }
     }
 }

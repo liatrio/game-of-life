@@ -63,7 +63,7 @@ pipeline {
          stage('Deploy to QA') {
              agent any
              steps {
-                 sh 'docker rm -f dev-gameoflife || true'
+                 sh 'docker rm -f qa-gameoflife || true'
                  sh 'docker run -p 18889:8080 -d --network=${LDOP_NETWORK_NAME} --name qa-gameoflife gameoflife-tomcat'
              }
          }

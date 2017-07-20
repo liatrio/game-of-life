@@ -86,6 +86,7 @@ pipeline {
          stage('Smoke Test prod') {
              agent { label 'master' }
              steps {
+                 sh "sleep 5"
                  sh "curl http://prid-gameoflife:8080/gameoflife"
                  echo "Should be accessible at http://localhost:18890/gameoflife"
 

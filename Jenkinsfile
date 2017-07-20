@@ -60,7 +60,7 @@ pipeline {
                  }
              }
              steps {
-                 sh "mvn clean -B test -DPETCLINIC_URL=http://dev-gameoflife:8080/gameoflife/"
+                 sh "mvn clean test"
                  echo "Should be accessible at http://localhost:18888/gameoflife"
              }
          }

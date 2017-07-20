@@ -55,7 +55,7 @@ pipeline {
          stage('Smoke test dev') {
              agent { label 'master' }
              steps {
-                 sh "curl http://localhost:18888/gameoflife"
+                 sh "curl http://dev-gameoflife:8080"
                  echo "Should be accessible at http://localhost:18888/gameoflife"
              }
          }
@@ -63,13 +63,13 @@ pipeline {
              agent any
              steps {
                  sh 'docker rm -f dev-gameoflife || true'
-                 sh 'docker run -p 18889:8080 -d --network=${LDOP_NETWORK_NAME} --name dev-gameoflife gameoflife-tomcat'
+                 sh 'docker run -p 18889:8080 -d --network=${LDOP_NETWORK_NAME} --name qa-gameoflife gameoflife-tomcat'
              }
          }
          stage('Smoke test qa') {
              agent { label 'master' }
              steps {
-                 sh "curl http://localhost:18889/gameoflife"
+                 sh "curl http://qa-gameoflife:8080/gameoflife"
                  echo "Should be accessible at http://localhost:18889/gameoflife"
                  input 'Deploy to Prod?'
              }
@@ -84,7 +84,7 @@ pipeline {
          stage('Smoke Test prod') {
              agent { label 'master' }
              steps {
-                 sh "curl http://localhost:18890/gameoflife"
+                 sh "curl http://prid-gameoflife:8080/gameoflife"
                  echo "Should be accessible at http://localhost:18890/gameoflife"
 
              }

@@ -55,6 +55,7 @@ pipeline {
          stage('Smoke test dev') {
              agent { label 'master' }
              steps {
+                 sh "sleep 5s"
                  sh "curl http://dev-gameoflife:8080"
                  echo "Should be accessible at http://localhost:18888/gameoflife"
              }

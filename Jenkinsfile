@@ -70,6 +70,7 @@ pipeline {
          stage('Smoke test qa') {
              agent { label 'master' }
              steps {
+                 sh "sleep 5s"
                  sh "curl http://qa-gameoflife:8080/gameoflife"
                  echo "Should be accessible at http://localhost:18889/gameoflife"
                  input 'Deploy to Prod?'

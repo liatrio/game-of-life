@@ -36,7 +36,7 @@ pipeline {
              agent any
              steps {
                  sh 'docker rm -f gameoflife-tomcat-temp || true'
-                 sh 'docker run -p 18887:8080 -d --network=${LDOP_NETWORK_NAME} --name gameoflife-tomcat-temp gameoflife-tomcat'
+                 sh 'docker run -p 18891:8080 -d --network=${LDOP_NETWORK_NAME} --name gameoflife-tomcat-temp gameoflife-tomcat'
              }
          }
          stage('Stop local container') {
@@ -49,7 +49,7 @@ pipeline {
              agent any
              steps {
                  sh 'docker rm -f dev-gameoflife || true'
-                 sh 'docker run -p 18888:8080 -d --network=${LDOP_NETWORK_NAME} --name dev-gameoflife gameoflife-tomcat'
+                 sh 'docker run -p 18892:8080 -d --network=${LDOP_NETWORK_NAME} --name dev-gameoflife gameoflife-tomcat'
              }
          }
          stage('Smoke test dev') {
@@ -57,14 +57,14 @@ pipeline {
              steps {
                  sh "sleep 5s"
                  sh "curl http://dev-gameoflife:8080"
-                 echo "Should be accessible at http://localhost:18888/gameoflife"
+                 echo "Should be accessible at http://localhost:18892/gameoflife"
              }
          }
          stage('Deploy to QA') {
              agent any
              steps {
                  sh 'docker rm -f qa-gameoflife || true'
-                 sh 'docker run -p 18889:8080 -d --network=${LDOP_NETWORK_NAME} --name qa-gameoflife gameoflife-tomcat'
+                 sh 'docker run -p 18893:8080 -d --network=${LDOP_NETWORK_NAME} --name qa-gameoflife gameoflife-tomcat'
              }
          }
          stage('Smoke test qa') {
@@ -72,7 +72,7 @@ pipeline {
              steps {
                  sh "sleep 5s"
                  sh "curl http://qa-gameoflife:8080/gameoflife"
-                 echo "Should be accessible at http://localhost:18889/gameoflife"
+                 echo "Should be accessible at http://localhost:18893/gameoflife"
                  input 'Deploy to Prod?'
              }
          }
@@ -80,7 +80,7 @@ pipeline {
              agent any
              steps {
                  sh 'docker rm -f prod-gameoflife || true'
-                 sh 'docker run -p 18890:8080 -d --network=${LDOP_NETWORK_NAME} --name prod-gameoflife gameoflife-tomcat'
+                 sh 'docker run -p 18894:8080 -d --network=${LDOP_NETWORK_NAME} --name prod-gameoflife gameoflife-tomcat'
              }
          }
          stage('Smoke Test prod') {
@@ -88,7 +88,7 @@ pipeline {
              steps {
                  sh "sleep 5"
                  sh "curl http://prod-gameoflife:8080/gameoflife"
-                 echo "Should be accessible at http://localhost:18890/gameoflife"
+                 echo "Should be accessible at http://localhost:1884/gameoflife"
 
              }
           }

@@ -73,8 +73,7 @@ pipeline {
                  sh "sleep 5s"
                  sh "curl http://qa-gameoflife:8080/gameoflife"
                  echo "Should be accessible at http://localhost:18893/gameoflife"
-                 input 'Deploy to Prod?'
-             }
+            }
          }
          stage('Deploy to prod') {
              agent any

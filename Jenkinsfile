@@ -27,6 +27,21 @@ pipeline {
            }
        }
        stage('Build container') {
+           agent any
+           steps {
+               script {
+                   sh "docker build -t gameoflife-tomcat:${env.BRANCH_NAME} ."
+                       if ( env.BRANCH_NAME == 'master' ) {
+                           pom = readMavenPom file: 'pom.xml'
+                           containerVersion = pom.version
+                           /*Need to check if version exists in the future*/
+                           /*failIfVersionExists("liatrio","petclinic-tomcat",containerVersion)*/
+                           sh "docker build -t gameoflife-tomcat:${containerVersion} ."
+                       }
+               }
+           }
+       }
+       stage('Build container') {
              agent any
              steps {
                  sh 'docker build -t gameoflife-tomcat .'
@@ -44,6 +59,22 @@ pipeline {
            steps {
              sh 'docker rm -f gameoflife-tomcat-temp || true'
            }
+         }
+         stage('Push to dockerhub') {
+             agent any
+             steps {
+                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]){
+                     script {
+                         sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
+                         if ( env.BRANCH_NAME == 'master' ) {
+                             sh "docker push gameoflife-tomcat:${containerVersion}"
+                         }
+                         else {
+                             sh "docker push gameoflife-tomcat:${env.BRANCH_NAME}"
+                         }
+                     }
+                 }
+             }
          }
          stage('Deploy to dev') {
              agent any

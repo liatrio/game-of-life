@@ -52,7 +52,7 @@ pipeline {
             steps {
                 script {
                     sh "docker build -t liatrio/game-of-life-tomcat:${env.BRANCH_NAME} ."
-                        if ( env.BRANCH_NAME == 'master' ) {
+                        if ( env.BRANCH_NAME == 'LDOP-302-full-demo' ) {
                             pom = readMavenPom file: 'pom.xml'
                             containerVersion = pom.version
                             sh "docker build -t liatrio/game-of-life-tomcat:${containerVersion} ."
@@ -93,7 +93,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]){
                     script {
                         sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
-                        if ( env.BRANCH_NAME == 'master' ) {
+                        if ( env.BRANCH_NAME == 'LDOP-302-full-demo' ) {
                             sh "docker push liatrio/game-of-life-tomcat:${containerVersion}"
                         }
                         else {
@@ -168,7 +168,7 @@ pipeline {
             deployToEnvironment("ec2-user", "petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "petclinic.liatr.io")
           }
         }
-       /* 
+       /*
         stage('Smoke test Prod') {
           when {
             branch 'master'

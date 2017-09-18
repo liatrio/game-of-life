@@ -2,7 +2,7 @@
 pipeline {
   agent none
   environment {
-    IMAGE = "liatrio/petclinic-tomcat"
+    IMAGE = "liatrio/game-of-life-tomcat"
   }
   stages {
     stage('Build') {
@@ -49,11 +49,11 @@ pipeline {
             agent any
             steps {
                 script {
-                    sh "docker build -t liatrio/petclinic-tomcat:${env.BRANCH_NAME} ."
+                    sh "docker build -t liatrio/game-of-life-tomcat:${env.BRANCH_NAME} ."
                         if ( env.BRANCH_NAME == 'master' ) {
                             pom = readMavenPom file: 'pom.xml'
                             containerVersion = pom.version
-                            sh "docker build -t liatrio/petclinic-tomcat:${containerVersion} ."
+                            sh "docker build -t liatrio/game-of-life-tomcat:${containerVersion} ."
                         }
                 }
             }
@@ -61,10 +61,11 @@ pipeline {
         stage('Run local container') {
             agent any
             steps {
-                sh 'docker rm -f petclinic-tomcat-temp || true'
-                sh "docker run -d --network=${LDOP_NETWORK_NAME} --name petclinic-tomcat-temp liatrio/petclinic-tomcat:${env.BRANCH_NAME}"
+                sh 'docker rm -f game-of-life-tomcat-temp || true'
+                sh "docker run -d --network=${LDOP_NETWORK_NAME} --name game-of-life-tomcat-temp liatrio/game-of-life-tomcat:${env.BRANCH_NAME}"
             }
         }
+        /*
         stage('Smoke-Test & OWASP Security Scan') {
           agent {
             docker {
@@ -77,10 +78,11 @@ pipeline {
             sh "mvn clean -B test -DPETCLINIC_URL=http://petclinic-tomcat:8080/petclinic/"
           }
         }
+        */
         stage('Stop local container') {
           agent any
           steps {
-            sh 'docker rm -f petclinic-tomcat-temp || true'
+            sh 'docker rm -f game-of-life-tomcat-temp || true'
           }
         }
         stage('Push to dockerhub') {
@@ -90,10 +92,10 @@ pipeline {
                     script {
                         sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
                         if ( env.BRANCH_NAME == 'master' ) {
-                            sh "docker push liatrio/petclinic-tomcat:${containerVersion}"
+                            sh "docker push liatrio/game-of-life-tomcat:${containerVersion}"
                         }
                         else {
-                            sh "docker push liatrio/petclinic-tomcat:${env.BRANCH_NAME}"
+                            sh "docker push liatrio/game-of-life-tomcat:${env.BRANCH_NAME}"
                         }
                     }
                 }
@@ -104,14 +106,15 @@ pipeline {
           steps {
             script {
               if ( env.BRANCH_NAME == 'master' ) {
-                deployToEnvironment("ec2-user", "dev-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "spring-petclinic", "dev-petclinic.liatr.io")
+                deployToEnvironment("ec2-user", "dev-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "dev-petclinic.liatr.io")
               }
               else{
-                deployToEnvironment("ec2-user", "dev-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${env.BRANCH_NAME}", "spring-petclinic", "dev-petclinic.liatr.io")
+                deployToEnvironment("ec2-user", "dev-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${env.BRANCH_NAME}", "game-of-life", "dev-petclinic.liatr.io")
               }
             }
           }
         }
+        /*
         stage('Smoke test dev') {
           agent {
             docker {
@@ -125,15 +128,17 @@ pipeline {
             echo "Should be accessible at https://dev-petclinic.liatr.io/petclinic"
           }
         }
+        */
         stage('Deploy to qa') {
           when {
             branch 'master'
           }
           agent any
           steps {
-              deployToEnvironment("ec2-user", "qa-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "spring-petclinic", "qa-petclinic.liatr.io")
+              deployToEnvironment("ec2-user", "qa-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "qa-petclinic.liatr.io")
           }
         }
+        /*
         stage('Smoke test qa') {
           when {
             branch 'master'
@@ -151,15 +156,17 @@ pipeline {
             input 'Deploy to Prod?'
           }
         }
+        */
         stage('Deploy to Prod') {
           when {
             branch 'master'
           }
           agent any
           steps {
-            deployToEnvironment("ec2-user", "petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "prod-petclinic", "petclinic.liatr.io")
+            deployToEnvironment("ec2-user", "petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "petclinic.liatr.io")
           }
         }
+       /* 
         stage('Smoke test Prod') {
           when {
             branch 'master'
@@ -175,5 +182,6 @@ pipeline {
             sh "mvn clean -B test -DPETCLINIC_URL=https://petclinic.liatr.io/petclinic"
           }
         }
+        */
       }
     }

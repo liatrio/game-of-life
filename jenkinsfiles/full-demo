@@ -43,7 +43,7 @@ pipeline {
           sh 'mvn clean'
           script {
             pom = readMavenPom file: 'pom.xml'
-            getArtifact(pom.groupId, pom.artifactId, pom.version, "gameoflife")
+            getArtifact(pom.groupId, pom.artifactId + "-web", pom.version, "gameoflife")
           }
         }
       }

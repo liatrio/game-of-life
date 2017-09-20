@@ -92,10 +92,10 @@ pipeline {
       steps {
         script {
           if ( env.BRANCH_NAME == 'master' ) {
-            deployToEnvironment("ec2-user", "dev-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "dev-petclinic.liatr.io")
+            deployToEnvironment("ec2-user", "dev.gameoflife.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "dev.gameoflife.liatr.io")
           }
           else {
-            deployToEnvironment("ec2-user", "dev-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${env.BRANCH_NAME}", "game-of-life", "dev-petclinic.liatr.io")
+            deployToEnvironment("ec2-user", "dev.gameoflife.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${env.BRANCH_NAME}", "game-of-life", "dev.gameoflife.liatr.io")
           }
         }
       }
@@ -104,8 +104,8 @@ pipeline {
       agent { label 'master' }
       steps {
         sh "sleep 5s"
-        sh "curl -k https://dev-petclinic.liatr.io/gameoflife"
-        echo "Should be accessible at https://dev-petclinic.liatr.io/gameoflife"
+        sh "curl -k https://dev.gameoflife.liatr.io/gameoflife"
+        echo "Should be accessible at https://dev.gameoflife.liatr.io/gameoflife"
       }
     }
     stage('Deploy to qa') {
@@ -114,7 +114,7 @@ pipeline {
       }
       agent any
       steps {
-        deployToEnvironment("ec2-user", "qa-petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "qa-petclinic.liatr.io")
+        deployToEnvironment("ec2-user", "qa.gameoflife.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "qa.gameoflife.liatr.io")
       }
     }
     stage('Smoke test qa') {
@@ -124,28 +124,8 @@ pipeline {
       agent { label 'master' }
       steps {
         sh "sleep 5s"
-        sh "curl -k https://qa-petclinic.liatr.io/gameoflife"
-        echo "Should be accessible at https://qa-petclinic.liatr.io/gameoflife"
-      }
-    }
-    stage('Deploy to Prod') {
-      when {
-        branch 'master'
-      }
-      agent any
-      steps {
-        deployToEnvironment("ec2-user", "petclinic.liatr.io", "petclinic-deploy-key", "${env.IMAGE}", "${containerVersion}", "game-of-life", "petclinic.liatr.io")
-      }
-    }
-    stage('Smoke test prod') {
-      when {
-        branch 'master'
-      }
-      agent { label 'master' }
-      steps {
-        sh "sleep 5s"
-        sh "curl -k https://prod-petclinic.liatr.io/gameoflife"
-        echo "Should be accessible at https://prod-petclinic.liatr.io/gameoflife"
+        sh "curl -k https://qa.gameoflife.liatr.io/gameoflife"
+        echo "Should be accessible at https://qa.gameoflife.liatr.io/gameoflife"
       }
     }
   }

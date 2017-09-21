@@ -62,9 +62,17 @@ pipeline {
       agent any
       steps {
         sh 'docker rm -f game-of-life-tomcat-temp || true'
-        sh "docker run -d --network=${LDOP_NETWORK_NAME} --name game-of-life-tomcat-temp liatrio/game-of-life-tomcat:${env.BRANCH_NAME}"
+        sh "docker run -d -p 9080:8080 --network=${LDOP_NETWORK_NAME} --name game-of-life-tomcat-temp liatrio/game-of-life-tomcat:${env.BRANCH_NAME}"
       }
     }
+    stage('Smoke test local') {
+			 agent { label 'master' }
+			 steps {
+					 sh "sleep 5s"
+					 sh "curl http://localhost:9080"
+					 echo "Should be accessible at http://localhost:9080/gameoflife"
+			 }
+	  }
     stage('Stop local container') {
       agent any
       steps {

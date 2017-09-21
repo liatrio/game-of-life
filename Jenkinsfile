@@ -66,13 +66,13 @@ pipeline {
       }
     }
     stage('Smoke test local') {
-			 agent { label 'master' }
-			 steps {
-					 sh "sleep 5s"
-					 sh "curl http://localhost:9080"
-					 echo "Should be accessible at http://localhost:9080/gameoflife"
-			 }
-	  }
+			agent { label 'master' }
+			steps {
+				sh "sleep 5s"
+				sh "curl http://localhost:9080"
+				echo "Should be accessible at http://localhost:9080/gameoflife"
+			}
+		}
     stage('Stop local container') {
       agent any
       steps {

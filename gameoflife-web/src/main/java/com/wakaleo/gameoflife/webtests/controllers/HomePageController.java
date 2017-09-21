@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomePageController {
     // do something nicer for the home page
 
-    /This should be a comment ******
+    //This should be a comment ******
 
     @RequestMapping("/")
     public ModelAndView index() {
